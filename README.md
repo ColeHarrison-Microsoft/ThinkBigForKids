@@ -28,6 +28,8 @@ The repository serves two purposes:
 | Chromebook pre-arrival setup (full reference) | [`docs/chromebook-setup.md`](docs/chromebook-setup.md) |
 | Teacher handout (student steps) | [`docs/handouts/teacher-pre-arrival-checklist.md`](docs/handouts/teacher-pre-arrival-checklist.md) |
 | FCPS IT admin review packet | [`docs/handouts/fcps-it-admin-review.md`](docs/handouts/fcps-it-admin-review.md) |
+| Original class docs / slide deck (reference) | [`docs/source-materials/`](docs/source-materials/) |
+| Original Arduino sketches (reference) | [`src/reference/arduino-car-code-3/`](src/reference/arduino-car-code-3/) |
 | Code-side TODO | [`src/ToDo.md`](src/ToDo.md) |
 
 ## Privacy

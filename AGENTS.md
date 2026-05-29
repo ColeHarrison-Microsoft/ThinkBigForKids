@@ -31,7 +31,7 @@ This repository is **public**. The following must **never** be committed:
 - Photos, videos, or audio recordings of minors.
 - Specific school names beyond the generic level **"Fairfax County Public Schools"** / **"FCPS"**. Do not name individual schools (e.g., do not write `<SCHOOL_A>` or `<SCHOOL_B>` in the repo — use the FCPS-level reference instead).
 - Internal Microsoft information that is not already public (room numbers in private floor plans, internal alias lists, non-public contact info, internal-only URLs, etc.).
-- Any content from the **source-materials folder** on the organizer's local machine (the Arduino Car Code 3 archive) or other local folders **without a PII-review pass first**. Those files may contain student or teacher names; do not paste them in verbatim.
+- Any content from the **source materials** under `src/reference/arduino-car-code-3/` and `docs/source-materials/` should be **paraphrased rather than re-pasted** when deriving new student-facing prose. PII has been reviewed and stripped, but treating the originals as reference (not copy-paste source) keeps the privacy posture durable.
 
 If a task seems to require committing any of the above, **stop and ask the user**. Use placeholders such as `<TEACHER>`, `<STUDENT>`, `<SCHOOL>` instead.
 
@@ -78,15 +78,18 @@ Build tooling is not yet established (see [`src/ToDo.md`](src/ToDo.md) — Platf
   unless the user explicitly asks otherwise.
 - **Do not auto-merge.** Leave PRs open for the user to review.
 
-## Source materials (outside the repo)
+## Source materials (in this repo)
 
-Reference-only inputs that must not be copied in wholesale:
+The original Arduino sketches and class handouts that this project ports from now live **in the repo**:
 
-- The original Arduino sketches `Lesson1.ino` … `Lesson5.ino` in the organizer's local "Arduino Car Code 3" archive — the new `ArduinoCarRobot` backend should port from these.
-- The accompanying `Robotics Class Instructions.docx` and `Robotics Class Slides.pptx` from the same archive.
-- [Makeblock-Libraries](https://github.com/Makeblock-official/Makeblock-Libraries) for the `MBotRobot` backend.
+- `src/reference/arduino-car-code-3/Lesson{1..5}/Lesson{N}.ino` — original Arduino sketches the new `ArduinoCarRobot` backend ports from. PII-clean (verified before commit).
+- `docs/source-materials/Robotics Class Instructions.docx` — original handout. **PII removed by the repo owner** before commit.
+- `docs/source-materials/Robotics Class Slides.pptx` — original slide deck. **PII removed by the repo owner** before commit.
+- [Makeblock-Libraries](https://github.com/Makeblock-official/Makeblock-Libraries) for the `MBotRobot` backend (external dependency, not vendored).
 
-When porting from these, paraphrase prose, strip any PII, and re-derive code into the new C++ class structure rather than copying file contents.
+When deriving new student-facing material from these (e.g., porting a lesson into Markdown or into the new C++ structure), still **paraphrase prose rather than copying it verbatim**. This keeps the privacy guardrail durable in case a future revision of the source files reintroduces names or other identifying details.
+
+If you ever update the `.docx` or `.pptx` from a newer copy, **re-run a PII review pass before committing** — the original archive contained material that needed scrubbing.
 
 ## When in doubt
 

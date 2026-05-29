@@ -3,6 +3,7 @@
 > **For:** Teachers preparing students for the **Microsoft Garage Field Trip**, November 2026.
 > **Time required (per student):** ~45–60 minutes, ideally split across two short sessions.
 > **What you need:** Each student's school Chromebook, a stable Wi-Fi connection, and (where applicable) parental consent for the GitHub account step.
+> **After the event:** the VS Code / Linux environment students set up here is intended to **stay** so they can keep using it for class projects and personal learning. There is no teardown step.
 
 The full technical reference is at [`../chromebook-setup.md`](../chromebook-setup.md). This page is the one to print or share with students.
 

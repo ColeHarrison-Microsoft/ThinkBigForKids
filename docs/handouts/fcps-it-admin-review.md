@@ -4,7 +4,7 @@
 > **Submitted by:** Microsoft volunteer organizers (contact info provided separately, not in this public document).
 > **Reading time:** ~10 minutes.
 
-This document defaults to **deny** — please grant only the minimum capabilities needed, and refer to the alternatives in §7 if any item cannot be approved.
+This document defaults to **deny** — please grant only the minimum capabilities needed, and refer to the alternatives in §7 if any item cannot be approved. The post-event posture is **harden in place**, not teardown — see §6.
 
 ## 1. Purpose and scope
 
@@ -15,7 +15,7 @@ A group of approximately 80 FCPS students will visit the Microsoft Garage for a 
 
 The most realistic path on a Chromebook for both is the **ChromeOS Linux development environment ("Crostini")** with **Visual Studio Code** installed inside it. This document describes exactly what that requires, the risks involved, mitigations, and post-event cleanup.
 
-The change is intended to be **temporary** for the period leading up to and including the event. §6 lists how to revert each Chromebook to its prior state.
+The change is intended to **remain in place after the event** so students can continue using VS Code, the Linux container, and their GitHub sign-in for ongoing learning. §6 ("Hardening in place") defines the ongoing security posture; full teardown is reserved for the specific cases noted at the end of §6.
 
 ## 2. Exact ChromeOS settings being changed
 
@@ -67,26 +67,49 @@ Severity legend: **L** = low, **M** = medium, **H** = high.
 | **R6** | **GitHub Copilot for minors** — terms-of-service compliance for the Free tier on student accounts. | M | Volunteers will verify Copilot Free terms eligibility before the event and switch to a volunteer-driven Copilot demo for Session 2 if individual student access is blocked. |
 | **R7** | **Privilege escalation via `dialout` and `sudo` in the container.** Any student-level escalation is confined inside the Crostini VM and does not grant ChromeOS-host privilege. | L | Document that `sudo` rights are local to the VM. The container is destroyed at the end of the event. |
 | **R8** | **Data exfiltration channel.** Linux container has full outbound network access by default through the same Wi-Fi the Chromebook uses. | M | Existing FCPS network egress controls (DNS filtering, proxy, firewall) still apply to Crostini traffic. We will publish the destination list (§4) so it can be allowlisted explicitly if FCPS prefers. |
-| **R9** | **Persistence of installed software / data after the event.** | L | Disabling Linux (§6) deletes the entire container in a single step. No artifacts remain in ChromeOS user storage from the Linux side. |
-| **R10** | **Local credential storage** (GitHub OAuth tokens) inside `gnome-keyring` could be left behind. | L | Disabling Linux removes `gnome-keyring` and its store. Optional: students sign out of GitHub from VS Code before the container is removed; admins can also revoke any active OAuth grants on the GitHub side via the student's account. |
+| **R9** | **Persistence of installed software / data after the event.** | L | Deliberate — students keep VS Code, the Linux container, and their GitHub sign-in to continue learning. Ongoing posture is defined in §6 (Hardening in place): apt update cadence, marketplace extension allowlist, USB-share revocation, and existing FCPS network controls. |
+| **R10** | **Local credential storage** (GitHub OAuth tokens) inside `gnome-keyring` could be left behind. | L | Tokens stay only as long as the student remains signed in. Students can sign out from VS Code at any time; admins can also revoke active OAuth grants from the GitHub side. If the Linux environment is ever fully removed (see §6 "When to actually remove the environment"), `gnome-keyring` and its store go with it. |
 | **R11** | **Hardware (USB) introducing malware.** A robot's USB-serial chip is presented to the Linux container as a `/dev/ttyUSBN` device only. | L | Robots are provided by event volunteers, not student-supplied. We can document the USB VID/PID list of the kits in advance. |
 | **R12** | **Network saturation / mass downloads.** ~80 Chromebooks pulling VS Code marketplace traffic concurrently could hit caps. | L–M | Pre-arrival setup is intentionally **at home / at school in advance**, not on event day. On-site, no large downloads are scheduled. |
 
-## 6. Re-lockdown / cleanup checklist
+## 6. Hardening in place (post-event)
 
-To revert each Chromebook to its prior state after the event:
+The Linux development environment, VS Code, and the students' GitHub sign-in are intended to **stay in place after the event** so students can keep learning, contributing, and exploring on their school Chromebooks. There is no teardown step.
 
-1. **Settings → Advanced → Developers → Linux development environment → Turn off / Remove**.
-   This deletes the entire Crostini container, including:
-   - VS Code, all extensions, and all student code.
-   - `gnome-keyring` and any stored credentials.
-   - `arduino-cli` / PlatformIO and any board support packages.
-2. **Settings → About ChromeOS → Linux development environment → USB preferences:** confirm no devices are still toggled to share with Linux. (After step 1 there is no Linux side to share with, but explicit verification is safest.)
-3. *(Optional, at the GitHub side, not on the device)* Each student can revoke the VS Code OAuth grant under <https://github.com/settings/applications> to invalidate any token that may have been cached.
-4. Reapply any FCPS device policies that were temporarily relaxed for the event (e.g., re-enabling a "block Linux" policy if one was paused).
-5. Confirm via `chrome://policy` that no event-specific policies remain.
+What we ask FCPS IT (and participating teachers) to maintain afterward, in priority order:
 
-We can provide this same checklist as a single-page printable PDF on request.
+1. **Keep ChromeOS up to date.** Standard FCPS update policy; Crostini security fixes ride along with it. No event-specific change required.
+2. **Keep the Linux container patched.** Periodic (suggested monthly) `sudo apt update && sudo apt upgrade -y` inside the Linux terminal. Teachers can run this with the class as a 5-minute exercise.
+3. **Pin VS Code to the official update channel.** VS Code self-updates from `code.visualstudio.com`. No marketplace-side configuration is needed; just leave the auto-update prompt on.
+4. **Lock down VS Code Marketplace extensions to an allowlist.** The event uses a small set (e.g., the C/C++ extension, PlatformIO IDE, GitHub Copilot). Ongoing FCPS policy can:
+   - Provide an explicit allowlist via VS Code's extension allow/deny settings (`extensions.allowed` / `extensions.blocked` in user settings, or via a managed configuration), or
+   - Disable the "auto-install recommended extensions" prompt and educate teachers to refer extension requests back to IT for approval.
+5. **Revoke event-day-only USB sharing entries.** Settings → About ChromeOS → Linux dev environment → USB preferences. Any robot USB-serial device that was toggled on for the event should be toggled off the day after the event. The `dialout` group membership inside the container is harmless to leave in place; it only matters when a USB device is actively shared.
+6. **Apply existing FCPS network egress controls to Crostini traffic.** Crostini uses the same Wi-Fi as the host, so the school's existing DNS filtering, proxy, and firewall rules apply. The destination list in §4 is what students will reach — no other destinations are required for ongoing use.
+7. **Optional — rotate the Linux container password periodically.** Setting it during enable is a one-time student step; rotating it on a school cadence is purely defense-in-depth.
+8. **Optional — keep the Linux user as a non-root day-to-day account.** Crostini's default user is in `sudo`, which is fine for this use. If FCPS prefers, IT can create a non-sudo user and reserve `sudo` for periodic apt updates only. Most schools find this unnecessary because the container is isolated from the host regardless.
+
+### Linux password vs. ChromeOS host password
+
+Some teachers prefer to set the **Linux container password the same as the student's Chromebook host login** so students don't have a second password to remember. This is a usability/security trade-off:
+
+| Approach | Pros | Cons |
+|---|---|---|
+| Same password as host | Easy for students; less help-desk overhead | Reuses a credential across boundaries; if either credential is compromised, the other is at risk |
+| Distinct, written-on-handout password | Clear separation; matches typical multi-credential hygiene | Students will lose the password and need a teacher reset |
+| Distinct, student-chosen password | Reasonable middle ground | Some students will pick something weak |
+
+We do not recommend a specific choice — it's an FCPS policy call. If you have no preference, "distinct, student-chosen password" is the most common middle ground.
+
+### When to actually remove the environment
+
+The only times we'd suggest fully disabling the Linux environment (Settings → Developers → Linux development environment → Turn off) are:
+
+- The student is leaving the school district / turning in their Chromebook.
+- A specific incident has compromised the container.
+- FCPS policy changes and Linux is no longer permitted on student devices.
+
+In any of those cases, turning off the Linux environment deletes the container, VS Code, all extensions, and stored credentials in a single step.
 
 ## 7. Alternatives if any item cannot be approved
 
@@ -112,7 +135,7 @@ Please indicate the items below that are approved.
 - [ ] **Day-of USB device sharing** to the Linux container for event-provided robot USB-serial devices is permitted.
 - [ ] **GitHub account use** by participating students is permitted (parental consent handled separately).
 - [ ] **GitHub Copilot Free** use is permitted on those accounts during the event.
-- [ ] The **re-lockdown checklist (§6)** will be executed by FCPS IT (or by participating teachers under IT's direction) within 7 days of the event.
+- [ ] The **hardening-in-place guidance (§6)** will be adopted as the ongoing post-event posture (rather than tearing the environment down).
 
 Approver name (FCPS IT): _________________________________________
 

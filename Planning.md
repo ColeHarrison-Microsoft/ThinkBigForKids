@@ -99,7 +99,7 @@ To be filled in as we recruit. Roles likely needed:
 | R6 | Pre-arrival setup low completion rate | Medium | Build a 15-minute setup catch-up block into the start of Session 1; have volunteers spot-fix common failures. |
 | R7 | Hardware breakage on the day (robots, USB cables, Chromebook chargers) | Low–Medium | Bring spares; establish a "hand-up = hardware swap" rule so coding mentors don't get pulled into hardware debugging. |
 | R8 | Wi-Fi saturation from ~80 simultaneous downloads | Medium | Pre-arrival setup is intentionally heavy on the at-home side. On-site, avoid mass extension installs. |
-| R9 | Student Chromebooks not in a clean state after the event | Low | Document the post-event re-lockdown steps in the IT review packet so schools can revert in one click (turn off Linux deletes the container). |
+| R9 | Student Chromebooks have non-trivial software (VS Code + Linux) on them after the event | Low | Deliberate — students are encouraged to keep using the environment. Ongoing security posture documented in the IT admin review packet (§6, "Hardening in place"): `apt update` cadence, VS Code marketplace allowlist, USB-share revocation, existing FCPS network egress controls. |
 
 ## Decision log
 
@@ -109,3 +109,5 @@ To be filled in as we recruit. Roles likely needed:
 | 2026-05-29 | Simulator is an ANSI terminal UI, not a web canvas | Runs everywhere with zero browser/WASM dependency; matches the C++ build path; minimal Linux setup. |
 | 2026-05-29 | Hardware path is Crostini Linux + arduino-cli/PlatformIO over USB | Lets students use the same VS Code workflow for both editing and flashing, with school-IT approval. |
 | 2026-05-29 | Repo is public; PII guardrails enforced via `AGENTS.md` | Lowers friction for volunteers and students to access the materials. |
+| 2026-05-29 | Post-event posture is "harden in place," not teardown | Students benefit from keeping VS Code, the Linux container, and their GitHub sign-in for ongoing learning. Ongoing security guidance in `docs/handouts/fcps-it-admin-review.md` §6. |
+| 2026-05-29 | Original `.ino` source files and class docs/slides committed to the repo | User confirmed PII removed from `.docx` and `.pptx`; `.ino` files were already PII-clean. Located at `src/reference/arduino-car-code-3/` and `docs/source-materials/`. |

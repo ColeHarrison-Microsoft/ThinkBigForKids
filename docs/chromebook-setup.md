@@ -118,6 +118,14 @@ Students do **not** need to do this before the event. On the day:
 
 If `arduino-cli` or PlatformIO is needed for flashing, volunteers will install that on the day from a known-good script — students do not need to install it themselves.
 
-## After the event — re-lockdown
+## After the event — keep your VS Code
 
-To revert the Chromebook to its pre-event state, see the **Re-lockdown checklist** in [`handouts/fcps-it-admin-review.md`](handouts/fcps-it-admin-review.md). The short version: turning off the Linux development environment in **Settings → Developers** deletes the container and everything we installed inside it in a single step.
+Your VS Code, your Linux environment, and your GitHub sign-in **stay** after the event. You can keep using them at school for class projects, personal learning, or future contributions to this repo.
+
+To keep things in good shape:
+
+- Run `sudo apt update && sudo apt upgrade -y` in the Linux terminal every month or so.
+- Let VS Code apply its own updates when it prompts you.
+- Don't install random extensions you don't recognize; if a teacher or volunteer recommends one, that's fine.
+
+The full ongoing-security checklist for FCPS IT is in [`handouts/fcps-it-admin-review.md`](handouts/fcps-it-admin-review.md) (§6, "Hardening in place").
