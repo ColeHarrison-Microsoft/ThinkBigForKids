@@ -1,0 +1,54 @@
+# Build artifacts
+build/
+out/
+bin/
+obj/
+*.o
+*.obj
+*.elf
+*.hex
+*.bin
+*.map
+*.lst
+
+# PlatformIO
+.pio/
+.pioenvs/
+.piolibdeps/
+
+# Arduino
+*.ino.cpp
+*.ino.with_bootloader.*
+
+# IDE / editor
+.vscode/*
+!.vscode/extensions.json
+!.vscode/tasks.json
+!.vscode/launch.json
+.idea/
+*.code-workspace
+
+# OS clutter
+.DS_Store
+Thumbs.db
+desktop.ini
+ehthumbs.db
+$RECYCLE.BIN/
+
+# Local env / secrets
+.env
+.env.*
+!.env.example
+
+# Logs
+*.log
+logs/
+
+# Python (in case any tooling shows up later)
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+
+# Node (in case any tooling shows up later)
+node_modules/
