@@ -1,0 +1,82 @@
+{
+  // Debug a lesson with breakpoints (press F5, or pick a config in the Run and
+  // Debug panel). Each config builds first (preLaunchTask "Build all lessons")
+  // then launches that lesson's binary under GDB.
+  //
+  // Requirements:
+  //   - The C/C++ extension (ms-vscode.cpptools).
+  //   - GDB on your PATH (the MinGW-w64 toolchain in src/BUILD.md ships gdb).
+  //   - Debug symbols are enabled via `-g` in src/platformio.ini.
+  //
+  // Set breakpoints in the lesson's .cpp (e.g. src/student/lessonN_*/lessonN.cpp)
+  // or in the simulator sources under src/sim/. externalConsole is true so the
+  // interactive lessons (2-4) get a real console for keyboard input.
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": "Debug Lesson 1 - Basic Movement",
+      "type": "cppdbg",
+      "request": "launch",
+      "program": "${workspaceFolder}/src/.pio/build/lesson1/program.exe",
+      "args": [],
+      "cwd": "${workspaceFolder}/src",
+      "stopAtEntry": false,
+      "externalConsole": true,
+      "MIMode": "gdb",
+      "miDebuggerPath": "gdb",
+      "preLaunchTask": "Build all lessons"
+    },
+    {
+      "name": "Debug Lesson 2 - Virtual Remote",
+      "type": "cppdbg",
+      "request": "launch",
+      "program": "${workspaceFolder}/src/.pio/build/lesson2/program.exe",
+      "args": [],
+      "cwd": "${workspaceFolder}/src",
+      "stopAtEntry": false,
+      "externalConsole": true,
+      "MIMode": "gdb",
+      "miDebuggerPath": "gdb",
+      "preLaunchTask": "Build all lessons"
+    },
+    {
+      "name": "Debug Lesson 3 - Object Following",
+      "type": "cppdbg",
+      "request": "launch",
+      "program": "${workspaceFolder}/src/.pio/build/lesson3/program.exe",
+      "args": [],
+      "cwd": "${workspaceFolder}/src",
+      "stopAtEntry": false,
+      "externalConsole": true,
+      "MIMode": "gdb",
+      "miDebuggerPath": "gdb",
+      "preLaunchTask": "Build all lessons"
+    },
+    {
+      "name": "Debug Lesson 4 - Line Following",
+      "type": "cppdbg",
+      "request": "launch",
+      "program": "${workspaceFolder}/src/.pio/build/lesson4/program.exe",
+      "args": [],
+      "cwd": "${workspaceFolder}/src",
+      "stopAtEntry": false,
+      "externalConsole": true,
+      "MIMode": "gdb",
+      "miDebuggerPath": "gdb",
+      "preLaunchTask": "Build all lessons"
+    },
+    {
+      "name": "Debug Lesson 5 - Obstacle Avoidance",
+      "type": "cppdbg",
+      "request": "launch",
+      "program": "${workspaceFolder}/src/.pio/build/lesson5/program.exe",
+      "args": [],
+      "cwd": "${workspaceFolder}/src",
+      "stopAtEntry": false,
+      "externalConsole": true,
+      "MIMode": "gdb",
+      "miDebuggerPath": "gdb",
+      "preLaunchTask": "Build all lessons"
+    }
+  ]
+}
