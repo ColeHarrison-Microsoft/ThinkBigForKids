@@ -1,0 +1,49 @@
+{
+  // One-click build/run for the robot simulator lessons.
+  //
+  // Run from the Command Palette: "Tasks: Run Task", or press the build
+  // shortcut (Ctrl+Shift+B) for the default "Build all lessons" task.
+  //
+  // Requires Python + PlatformIO Core (pio) and a C/C++ compiler (g++/clang)
+  // on your PATH. See src/BUILD.md. Each "Run" task builds AND launches the
+  // program in the integrated terminal, so you can type keys for the
+  // interactive lessons (2-4): arrow keys / WASD, Q to quit, Enter to finish
+  // drawing in Lesson 4.
+  "version": "2.0.0",
+  "options": {
+    "cwd": "${workspaceFolder}/src"
+  },
+  "presentation": {
+    "echo": true,
+    "reveal": "always",
+    "focus": true,
+    "panel": "dedicated",
+    "clear": true
+  },
+  "tasks": [
+    {
+      "label": "Build all lessons",
+      "type": "shell",
+      "command": "pio",
+      "args": [
+        "run",
+        "-e", "lesson1", "-e", "lesson2", "-e", "lesson3",
+        "-e", "lesson4", "-e", "lesson5"
+      ],
+      "group": { "kind": "build", "isDefault": true },
+      "problemMatcher": ["$gcc"]
+    },
+
+    { "label": "Run Lesson 1 - Basic Movement",      "type": "shell", "command": "pio", "args": ["run", "-e", "lesson1", "-t", "exec"], "group": "test", "problemMatcher": ["$gcc"] },
+    { "label": "Run Lesson 2 - Virtual Remote",      "type": "shell", "command": "pio", "args": ["run", "-e", "lesson2", "-t", "exec"], "group": "test", "problemMatcher": ["$gcc"] },
+    { "label": "Run Lesson 3 - Object Following",    "type": "shell", "command": "pio", "args": ["run", "-e", "lesson3", "-t", "exec"], "group": "test", "problemMatcher": ["$gcc"] },
+    { "label": "Run Lesson 4 - Line Following",      "type": "shell", "command": "pio", "args": ["run", "-e", "lesson4", "-t", "exec"], "group": "test", "problemMatcher": ["$gcc"] },
+    { "label": "Run Lesson 5 - Obstacle Avoidance",  "type": "shell", "command": "pio", "args": ["run", "-e", "lesson5", "-t", "exec"], "group": "test", "problemMatcher": ["$gcc"] },
+
+    { "label": "Run Lesson 1 - SOLUTION", "type": "shell", "command": "pio", "args": ["run", "-e", "example_lesson1", "-t", "exec"], "group": "test", "problemMatcher": ["$gcc"] },
+    { "label": "Run Lesson 2 - SOLUTION", "type": "shell", "command": "pio", "args": ["run", "-e", "example_lesson2", "-t", "exec"], "group": "test", "problemMatcher": ["$gcc"] },
+    { "label": "Run Lesson 3 - SOLUTION", "type": "shell", "command": "pio", "args": ["run", "-e", "example_lesson3", "-t", "exec"], "group": "test", "problemMatcher": ["$gcc"] },
+    { "label": "Run Lesson 4 - SOLUTION", "type": "shell", "command": "pio", "args": ["run", "-e", "example_lesson4", "-t", "exec"], "group": "test", "problemMatcher": ["$gcc"] },
+    { "label": "Run Lesson 5 - SOLUTION", "type": "shell", "command": "pio", "args": ["run", "-e", "example_lesson5", "-t", "exec"], "group": "test", "problemMatcher": ["$gcc"] }
+  ]
+}
