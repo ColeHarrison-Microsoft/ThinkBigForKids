@@ -1,0 +1,11 @@
+{
+  // Extensions recommended for working on this project. VS Code will offer to
+  // install these the first time you open the repo.
+  "recommendations": [
+    // PlatformIO Core + IDE: builds/runs the simulator envs (also installs a
+    // bundled toolchain if you don't have one).
+    "platformio.platformio-ide",
+    // C/C++ language support + the debugger used by .vscode/launch.json.
+    "ms-vscode.cpptools"
+  ]
+}
