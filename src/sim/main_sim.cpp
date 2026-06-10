@@ -3,11 +3,21 @@
 #include "robot/IRobot.h"
 #include "SimRobot.h"
 #include "SimWorld.h"
+#include "Worlds.h"
 
 #if defined(_WIN32)
 #define WIN32_LEAN_AND_MEAN
 #include <windows.h>
 #endif
+
+/*
+ * Which world/scenario to build is chosen at compile time by the PlatformIO
+ * env via a -D flag:
+ *   (none)        -> default course (Lessons 1 & 5)
+ *   WORLD_REMOTE  -> IR-remote room       (Lesson 2)
+ *   WORLD_FOLLOW  -> object-following area (Lesson 3)
+ *   WORLD_LINE    -> interactive line draw (Lesson 4)
+ */
 
 namespace {
 
@@ -23,33 +33,37 @@ void enableAnsi() {
 #endif
 }
 
-// Build the default course the student program drives through. A clear lane up
-// the middle with a scattering of obstacles to detect and avoid.
-robot::SimWorld buildDefaultWorld() {
-    robot::SimWorld world(28, 14);
-
-    world.addObstacle(13, 5);
-    world.addObstacle(14, 5);
-    world.addObstacle(8, 8);
-    world.addObstacle(20, 9);
-    world.addObstacle(21, 9);
-    world.addObstacle(6, 3);
-    world.addObstacle(18, 2);
-
-    // Robot starts near the bottom-center, pointing up (North).
-    world.setRobot(14, 12, robot::Heading::North);
-    return world;
-}
-
 }  // namespace
 
 int main() {
     enableAnsi();
 
-    robot::SimWorld world = buildDefaultWorld();
+#if defined(WORLD_REMOTE)
+    robot::SimWorld world = robot::buildMovementWorld();
+#elif defined(WORLD_FOLLOW)
+    robot::SimWorld world = robot::buildFollowWorld();
+#elif defined(WORLD_LINE)
+    robot::SimWorld world = robot::buildLineWorld();
+#else
+    robot::SimWorld world = robot::buildDefaultWorld();
+#endif
+
     robot::SimRobot robot(world);
 
+#if defined(WORLD_REMOTE)
+    robot.setInputMode(robot::InputMode::Remote);
     robot::runStudentProgram(robot);
+#elif defined(WORLD_FOLLOW)
+    robot.setInputMode(robot::InputMode::Follow);
+    robot::runStudentProgram(robot);
+#elif defined(WORLD_LINE)
+    robot.setInputMode(robot::InputMode::Idle);
+    if (robot.runLineDrawPhase()) {
+        robot::runStudentProgram(robot);
+    }
+#else
+    robot::runStudentProgram(robot);
+#endif
 
     std::printf("\nProgram finished. Press Enter to exit.\n");
     std::getchar();

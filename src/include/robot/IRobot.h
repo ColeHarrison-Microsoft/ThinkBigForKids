@@ -61,6 +61,28 @@ public:
     virtual void lookLeft() = 0;
     virtual void lookCenter() = 0;
     virtual void lookRight() = 0;
+
+    // --- Controller / extra sensors ---
+    // Every backend must implement these. On hardware they read the real
+    // remote / sensors; in the simulator they are computed from the world and
+    // the keyboard "virtual remote".
+
+    // The button currently pressed on the controller (RemoteButton::None if
+    // nothing). Used by the IR-remote lesson.
+    virtual RemoteButton readRemote() = 0;
+
+    // True when the user has asked to quit (e.g., pressed Q in the simulator).
+    // On hardware this is always false (the robot runs until powered off).
+    // Interactive lessons loop `while (!robot.quitRequested())`.
+    virtual bool quitRequested() = 0;
+
+    // Read the two side object-detection sensors. Used by the object-following
+    // lesson.
+    virtual ObstacleReading readObstacles() = 0;
+
+    // Read the five line-tracking sensors (left to right). Used by the
+    // line-following lesson.
+    virtual LineReading readLineSensors() = 0;
 };
 
 /*

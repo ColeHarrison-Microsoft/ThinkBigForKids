@@ -11,6 +11,8 @@
  *     it can be shared by all three backends without changes.
  */
 
+#include <string>
+
 namespace robot {
 
 // Motor speed range. Mirrors the Arduino PWM range used in the original
@@ -43,6 +45,39 @@ enum class LookDirection {
     Left,
     Center,
     Right
+};
+
+// A button press coming from the robot's controller. On hardware this is an IR
+// remote; in the simulator it is the keyboard "virtual remote".
+enum class RemoteButton {
+    None,   // nothing pressed right now
+    Up,     // drive forward
+    Down,   // drive backward
+    Left,   // turn left
+    Right,  // turn right
+    Stop    // stop
+};
+
+// Reading from the two object-detection sensors (one per side). true means an
+// object is detected on that side. Used by the object-following lesson.
+struct ObstacleReading {
+    bool left = false;
+    bool right = false;
+};
+
+// Reading from the five line-tracking sensors, left (s[0]) to right (s[4]).
+// true means that sensor is over the line. Used by the line-following lesson.
+struct LineReading {
+    bool s[5] = {false, false, false, false, false};
+
+    // Render the reading as a 5-character pattern like "00100" (1 = on the
+    // line). Handy for comparing against known patterns, mirroring the original
+    // Arduino lesson.
+    std::string pattern() const {
+        std::string out;
+        for (bool on : s) out += (on ? '1' : '0');
+        return out;
+    }
 };
 
 // Result of looking in all three directions at once. Handy for obstacle

@@ -74,21 +74,38 @@ DLLs on `PATH`.
 | Env | Program |
 |---|---|
 | `lesson1` | Lesson 1 student scaffold (basic movement) |
+| `lesson2` | Lesson 2 student scaffold (virtual remote) |
+| `lesson3` | Lesson 3 student scaffold (object following) |
+| `lesson4` | Lesson 4 student scaffold (line following) |
 | `lesson5` | Lesson 5 student scaffold (obstacle avoidance) |
-| `example_lesson1` | Lesson 1 reference solution |
-| `example_lesson5` | Lesson 5 reference solution |
+| `example_lesson1` … `example_lesson5` | matching reference solutions |
 
 `default_envs` is `lesson1`, so a bare `pio run` builds that.
 
 ## What you'll see
 
 A top-down ANSI view of the world: the robot (`^ > v <` showing its heading),
-obstacles (`#`), the trail it has driven (`.`), a border, and a colored status
-line (current action and, while scanning, the measured distance). Movement
-blocks for the requested milliseconds — `forward(2000)` drives for ~2 seconds —
-so behavior matches the real cars.
+obstacles (`#`), the line/track (`=`), the follow target (`O`), the draw pen
+(`+`), the trail it has driven (`.`), a border, and a colored status line
+(current action and, while scanning, the measured distance). Movement blocks for
+the requested milliseconds — `forward(2000)` drives for ~2 seconds — so behavior
+matches the real cars.
+
+## Keyboard controls (interactive lessons)
+
+Lessons 2–4 read a keyboard "virtual remote". Use the **arrow keys** or
+**W / A / S / D**:
+
+| Lesson | What the keys do |
+|---|---|
+| 2 — Virtual Remote | Drive the robot directly; **Q** quits |
+| 3 — Object Following | Move the target `O`; the robot follows it; **Q** quits |
+| 4 — Line Following | Move the pen `+` to **draw the track**, **Enter** to finish, then the robot follows the line you drew |
+
+For automated runs you can also pipe keys into the program, e.g.
+`echo wwddq | ./program` (end of input quits the interactive lessons).
 
 ## Notes
 
 - **C++ standard:** the native/sim build targets **C++17** (`-std=c++17`).
-- Lessons 2–4 and the AVR backends are deferred; see [`ToDo.md`](ToDo.md).
+- The mBot and Arduino-car AVR backends are deferred; see [`ToDo.md`](ToDo.md).

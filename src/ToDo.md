@@ -38,13 +38,13 @@ Build system: **PlatformIO** with three envs (`sim`, `mbot`, `arduino_car`). The
 
 ## Active todos
 
-> **Status — vertical slice landed.** The `IRobot` interface, the text
-> **simulator** backend, the **Lesson 1 & Lesson 5** scaffolds + reference
-> solutions, and a working **PlatformIO native env** are implemented and
-> verified (builds + runs on Windows via MinGW-w64; static-linked binaries).
-> See [`BUILD.md`](BUILD.md). Deferred: mBot + Arduino-car AVR backends and
-> **Lessons 2–4** (they need IR-remote / dual-obstacle / 5-sensor line inputs
-> not in the current interface).
+> **Status — Lessons 1–5 simulator complete.** The `IRobot` interface (movement
+> + ultrasonic + remote/object/line sensors), the text **simulator** backend
+> (with a keyboard "virtual remote", a movable follow target, and interactive
+> line-drawing), **all five lesson scaffolds + reference solutions**, and the
+> **PlatformIO native envs** are implemented and verified (builds + runs on
+> Windows via MinGW-w64; static-linked binaries). See [`BUILD.md`](BUILD.md).
+> Deferred: mBot + Arduino-car AVR backends.
 
 ### IRobot interface
 - [x] Define `IRobot` (pure virtual) in `include/robot/IRobot.h`. Methods modeled on the existing `.ino` lessons:
@@ -56,6 +56,10 @@ Build system: **PlatformIO** with three envs (`sim`, `mbot`, `arduino_car`). The
   - `void stop()`
   - `int scan()` — returns distance in cm
   - `void lookLeft()`, `void lookCenter()`, `void lookRight()` — control servo head; no-op on robots without one
+  - `RemoteButton readRemote()` — controller button (IR remote / keyboard virtual remote)
+  - `bool quitRequested()` — user asked to quit (sim Q); always false on hardware
+  - `ObstacleReading readObstacles()` — two side object sensors (object following)
+  - `LineReading readLineSensors()` — five line-tracking sensors (line following)
 - [x] Add `RobotTypes.h` with shared enums/constants (`Direction`, `DEFAULT_SPEED`, etc.).
 - [x] Decide and document the C++ floor (target C++17 for sim, fall back to C++11 for AVR if needed).
 
@@ -77,9 +81,9 @@ Build system: **PlatformIO** with three envs (`sim`, `mbot`, `arduino_car`). The
 
 ### Student lesson scaffolds
 - [x] Port Lesson 1 (basic movement) — students fill in nothing, just compile/run/observe (warm-up).
-- [ ] Port Lesson 2–4 from the source `.ino` files into student-facing scaffolds with `// !EDIT #N: ...` blanks (matching the convention already used in `Lesson5.ino`). _Deferred: Lesson 2 (IR remote), Lesson 3 (dual rear obstacle sensors), Lesson 4 (5-sensor line follower) use hardware not in the current `IRobot`; they need interface + sim input/sensor extensions first._
+- [x] Port Lesson 2–4 from the source `.ino` files into student-facing scaffolds with `// !EDIT #N: ...` blanks (matching the convention already used in `Lesson5.ino`). _Lesson 2 = keyboard "virtual remote"; Lesson 3 = object following (student drives the target `O` with keys, robot follows); Lesson 4 = student draws the track interactively, then the robot follows the line. All re-themed for the simulator's sensors rather than the original IR/line hardware._
 - [x] Port Lesson 5 (obstacle avoidance) as the capstone.
-- [x] Provide reference solutions in `examples/`. _(Lesson 1 & Lesson 5; add 2–4 when those land.)_
+- [x] Provide reference solutions in `examples/`. _(All five lessons.)_
 - [ ] **Strip every name / class identifier from the source `.docx` / `.pptx`** before deriving any handout from them. PII review is mandatory before commit (see `AGENTS.md`).
 
 ### Build / tooling
