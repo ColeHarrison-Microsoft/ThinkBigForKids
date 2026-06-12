@@ -3,7 +3,9 @@
  *
  * The robot has an object sensor on each side. It should chase a target (shown
  * as O). YOU move the target around with the arrow keys (or W / A / S / D), and
- * the robot's job — your code — is to steer toward it. Press Q to quit.
+ * the robot's job — your code — is to steer toward it. Press Q to quit (in the
+ * simulator). The same code runs on a real robot, which uses its own object
+ * sensors instead of the keyboard-controlled target.
  *
  * YOUR TASKS — fill in each // !EDIT block:
  *   #1: object seen on BOTH sides (straight ahead) -> drive forward

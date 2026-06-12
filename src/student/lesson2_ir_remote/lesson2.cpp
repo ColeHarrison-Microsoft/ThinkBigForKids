@@ -2,7 +2,10 @@
  * Lesson 2: Drive with the Virtual Remote
  *
  * Use the keyboard as a remote control! Press the arrow keys (or W / A / S / D)
- * to drive the robot around the room. Press Q to quit.
+ * to drive the robot around the room. Press Q to quit (in the simulator).
+ *
+ * The same code runs on a real robot, where it reads the robot's own IR remote
+ * instead of the keyboard.
  *
  * The simulator turns your key presses into remote-button readings. Your job is
  * to make the robot move the right way for each button.

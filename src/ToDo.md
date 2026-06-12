@@ -38,13 +38,19 @@ Build system: **PlatformIO** with three envs (`sim`, `mbot`, `arduino_car`). The
 
 ## Active todos
 
-> **Status — Lessons 1–5 simulator complete.** The `IRobot` interface (movement
-> + ultrasonic + remote/object/line sensors), the text **simulator** backend
-> (with a keyboard "virtual remote", a movable follow target, and interactive
-> line-drawing), **all five lesson scaffolds + reference solutions**, and the
-> **PlatformIO native envs** are implemented and verified (builds + runs on
-> Windows via MinGW-w64; static-linked binaries). See [`BUILD.md`](BUILD.md).
-> Deferred: mBot + Arduino-car AVR backends.
+> **Status — simulator + both hardware backends implemented.** The `IRobot`
+> interface, the text **simulator** backend (keyboard "virtual remote", movable
+> follow target, interactive line-drawing), **all five lesson scaffolds +
+> reference solutions**, and the **PlatformIO native envs** are implemented and
+> verified on Windows (MinGW-w64, static-linked). The **mBot** (`MBotRobot`) and
+> **Arduino-car** (`ArduinoCarRobot`) AVR backends are now implemented and
+> **compile-clean across all 20 hardware envs**. Remaining: on-device bring-up —
+> start with the mBot via [`mbot/TEST_PLAN.md`](mbot/TEST_PLAN.md); the Arduino
+> car carries documented `MUST-VERIFY` wiring notes (servo pin, Servo/PWM timer,
+> sensor polarity). See [`BUILD.md`](BUILD.md). **Live mBot check:** movement, IR
+> remote, and ultrasonic obstacle-avoidance verified on hardware; line-sensor
+> polarity calibrated on the real course (`LINE_ON_WHEN_BIT_SET = false`). See
+> [`mbot/TEST_PLAN.md`](mbot/TEST_PLAN.md) "Bring-up status" for what remains.
 
 ### IRobot interface
 - [x] Define `IRobot` (pure virtual) in `include/robot/IRobot.h`. Methods modeled on the existing `.ino` lessons:
@@ -71,13 +77,14 @@ Build system: **PlatformIO** with three envs (`sim`, `mbot`, `arduino_car`). The
 - [x] Match Arduino timing semantics so behavior translates (e.g., `forward(2000)` blocks ~2s).
 
 ### mBot backend
-- [ ] Pull in Makeblock-Libraries (https://github.com/Makeblock-official/Makeblock-Libraries) as a PlatformIO lib dep.
-- [ ] Implement `MBotRobot` mapping `IRobot` methods onto `MeAuriga` / `MeUltrasonicSensor` / `MeRGBLed` calls.
+- [x] Pull in Makeblock-Libraries (https://github.com/Makeblock-official/Makeblock-Libraries) as a PlatformIO lib dep. _Resolves as `MakeBlockDrive` from the GitHub URL in `mbot_base`._
+- [x] Implement `MBotRobot` for the **classic mBot (mCore)** mapping `IRobot` onto `MeDCMotor(M1/M2)`, `MeUltrasonicSensor(PORT_3)`, `MeLineFollower(PORT_2)`, and the onboard `MeIR`. _Hardware-honest adaptations so the same lesson code runs: the fixed ultrasonic → `scan()` pivots the body to "look" left/right; the 2 line sensors are mapped into the 5-sensor reading; object-following is synthesized from the ultrasonic. Tunables + `MUST-VERIFY` notes are at the top of `MBotRobot.cpp`; bring-up steps in [`mbot/TEST_PLAN.md`](mbot/TEST_PLAN.md). (Note: earlier notes mentioned `MeAuriga`/`MeRGBLed` — Auriga is the mBot **Ranger**, not the classic mBot we target.)_
 
 ### Arduino DIY car backend
-- [ ] Port `Lesson1.ino` movement primitives into `ArduinoCarRobot::forward / reverse / turnLeft / turnRight / setMotorSpeed / stop` using the same pin assignments (pins 6/7/8 for L motor, 9/11/12 for R motor; servo on the established pin; ultrasonic TRIG/ECHO).
-- [ ] Port the `Lesson5.ino` ultrasonic `scan()` and head-servo control.
-- [ ] Mirror the timing semantics of the simulator.
+- [x] Port `Lesson1.ino` movement primitives into `ArduinoCarRobot::forward / reverse / turnLeft / turnRight / setMotorSpeed / stop` using the same pin assignments (L motor 6/7/8, R motor 9/11/12). _`setMotorSpeed(L,R)` is honored; movement blocks for `ms` then stops._
+- [x] Port the `Lesson5.ino` ultrasonic `scan()` (TRIG 10 / ECHO 2) and head-servo control. _Servo moved off pin 9 (conflicts with right-motor PWM) to pin 5 — `MUST-VERIFY` vs the real harness; also note the Uno `Servo` lib disables PWM on pins 9/10._
+- [x] Mirror the timing semantics of the simulator.
+- [x] Implement IR remote (`readRemote`, IRremote v4), side object sensors (`readObstacles`, pins 2/3), and 5 line sensors (`readLineSensors`, A0–A4). _Sensor subsystems are lazily initialized because the original lessons reuse pins 2 and 10 across different lessons._
 
 ### Student lesson scaffolds
 - [x] Port Lesson 1 (basic movement) — students fill in nothing, just compile/run/observe (warm-up).
@@ -87,7 +94,7 @@ Build system: **PlatformIO** with three envs (`sim`, `mbot`, `arduino_car`). The
 - [ ] **Strip every name / class identifier from the source `.docx` / `.pptx`** before deriving any handout from them. PII review is mandatory before commit (see `AGENTS.md`).
 
 ### Build / tooling
-- [x] Add `platformio.ini` with three envs (`sim`, `mbot`, `arduino_car`). _Done for the native sim (per-program envs: `lesson1`, `lesson5`, `example_lesson1`, `example_lesson5`); `mbot`/`arduino_car` left as commented stubs._
+- [x] Add `platformio.ini` with envs for the native sim **and both AVR backends**. _Native per-program envs (`lesson1..5`, `example_lesson1..5`); AVR envs `mbot_lesson1..5`/`mbot_example1..5` and `arduino_car_lesson1..5`/`arduino_car_example1..5`, sharing `avr_base`/`mbot_base`/`arduino_car_base`. All 20 hardware envs compile clean._
 - [x] `sim` env should build a native Linux binary that runs in the Crostini terminal. _Verified native build + run on Windows (MinGW-w64, static-linked); Crostini/Linux build expected to work with system g++ but still to be confirmed on a Chromebook._
 - [x] Document the build commands in a `src/BUILD.md` (or in `README.md`) once envs are working.
 - [ ] Decide on whether to add a CI build for the `sim` env on PR (low priority).

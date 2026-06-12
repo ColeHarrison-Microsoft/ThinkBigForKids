@@ -1,8 +1,9 @@
 # Building & Running the Simulator
 
-This is the verified build/run guide for the **text simulator** backend — the
-no-hardware path that runs in a terminal. The mBot and Arduino-car backends are
-not implemented yet (see [`ToDo.md`](ToDo.md)).
+This is the verified build/run guide. The **text simulator** backend is the
+no-hardware path that runs in a terminal; the **mBot** and **Arduino-car**
+backends cross-compile to the robots (see
+[Hardware backends](#hardware-backends-mbot--arduino-car) below).
 
 ## What you need
 
@@ -105,7 +106,45 @@ Lessons 2–4 read a keyboard "virtual remote". Use the **arrow keys** or
 For automated runs you can also pipe keys into the program, e.g.
 `echo wwddq | ./program` (end of input quits the interactive lessons).
 
+## Hardware backends: mBot & Arduino car
+
+The same lesson code also runs on the two robots. These envs cross-compile to AVR
+(ATmega328P) with the Arduino framework. The **first** hardware build auto-installs
+the `atmelavr` platform and clones the per-robot libraries (Makeblock for the mBot;
+IRremote + Servo for the Arduino car), so it needs network access and takes a little
+longer; later builds are fast.
+
+Build (compile-check) from `src/`:
+
+```pwsh
+pio run -e mbot_example1         # mBot, Lesson 1 reference solution
+pio run -e arduino_car_example5  # Arduino car, Lesson 5 reference solution
+```
+
+Flash to a connected robot over USB with the `upload` target:
+
+```pwsh
+pio run -e mbot_example1 -t upload
+pio run -e mbot_lesson5  -t upload   # a student's filled-in Lesson 5 scaffold
+```
+
+| Env prefix | Robot | Program |
+|---|---|---|
+| `mbot_lesson1` … `mbot_lesson5` | classic mBot (mCore) | student scaffolds |
+| `mbot_example1` … `mbot_example5` | classic mBot (mCore) | reference solutions |
+| `arduino_car_lesson1` … `arduino_car_lesson5` | DIY Arduino car | student scaffolds |
+| `arduino_car_example1` … `arduino_car_example5` | DIY Arduino car | reference solutions |
+
+- **mBot bring-up:** follow the step-by-step [`mbot/TEST_PLAN.md`](mbot/TEST_PLAN.md).
+- **Per-robot differences** (the mBot's fixed ultrasonic, 2 line sensors, and lack
+  of side object sensors; the Arduino car's servo-pin / sensor-polarity
+  `MUST-VERIFY` notes) are documented at the top of `mbot/MBotRobot.cpp` and
+  `arduino_car/ArduinoCarRobot.cpp`.
+- Both backends honor the same `IRobot` timing contract as the simulator, so a
+  lesson that works in the sim behaves the same way on a robot.
+
 ## Notes
 
 - **C++ standard:** the native/sim build targets **C++17** (`-std=c++17`).
-- The mBot and Arduino-car AVR backends are deferred; see [`ToDo.md`](ToDo.md).
+- **Hardware (AVR) backends** use the Arduino framework; the shared headers stay
+  AVR-safe (no `<string>`/STL on AVR — guarded with `#if !defined(ARDUINO)`).
