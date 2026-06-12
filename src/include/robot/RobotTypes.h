@@ -11,7 +11,13 @@
  *     it can be shared by all three backends without changes.
  */
 
+// std::string is only available on the native/simulator build. The Arduino
+// (AVR) toolchain that the mBot and Arduino-car backends use has no <string>,
+// so it is guarded out for hardware. The only thing that needs it is the
+// sim-only pattern() helper below, which no lesson depends on.
+#if !defined(ARDUINO)
 #include <string>
+#endif
 
 namespace robot {
 
@@ -70,14 +76,16 @@ struct ObstacleReading {
 struct LineReading {
     bool s[5] = {false, false, false, false, false};
 
+#if !defined(ARDUINO)
     // Render the reading as a 5-character pattern like "00100" (1 = on the
     // line). Handy for comparing against known patterns, mirroring the original
-    // Arduino lesson.
+    // Arduino lesson. Native/simulator build only (no <string> on AVR).
     std::string pattern() const {
         std::string out;
         for (bool on : s) out += (on ? '1' : '0');
         return out;
     }
+#endif
 };
 
 // Result of looking in all three directions at once. Handy for obstacle

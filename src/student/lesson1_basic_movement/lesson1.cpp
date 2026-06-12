@@ -7,6 +7,9 @@
  * Everything is provided here — just build, run, and watch it go! This is a
  * warm-up so you get comfortable building and running a program.
  *
+ * The same code runs on the text simulator and on a real robot (an mBot or the
+ * Arduino car) — nothing changes when you switch.
+ *
  * Look at how each line calls a method on `robot`:
  *   robot.forward(2000);  means "drive forward for 2000 milliseconds (2s)".
  */

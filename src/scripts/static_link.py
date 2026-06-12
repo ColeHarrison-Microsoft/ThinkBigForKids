@@ -9,10 +9,14 @@
 #
 Import("env")
 
-env.Append(
-    LINKFLAGS=[
-        "-static",
-        "-static-libgcc",
-        "-static-libstdc++",
-    ]
-)
+# Only the native (simulator) build benefits from statically linking the host
+# C/C++ runtimes. On the AVR backends (mBot, Arduino car) these driver flags are
+# meaningless or harmful, so this script is a no-op there.
+if env.get("PIOPLATFORM") == "native":
+    env.Append(
+        LINKFLAGS=[
+            "-static",
+            "-static-libgcc",
+            "-static-libstdc++",
+        ]
+    )

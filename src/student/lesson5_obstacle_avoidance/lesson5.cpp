@@ -4,6 +4,9 @@
  * The robot "looks" left, center, and right using its ultrasonic sensor, then
  * decides where to drive so it doesn't crash into obstacles (#).
  *
+ * The same code runs on a real robot. (On an mBot, whose sensor doesn't swivel,
+ * the robot briefly turns its body to "look" left and right.)
+ *
  * YOUR TASKS — fill in each // !EDIT block below:
  *   #1: Decide when the path ahead is blocked.
  *   #2: Drive forward when the path is clear.

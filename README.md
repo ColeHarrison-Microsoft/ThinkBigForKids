@@ -31,6 +31,8 @@ The repository serves two purposes:
 | Original class docs / slide deck (reference) | [`docs/source-materials/`](docs/source-materials/) |
 | Original Arduino sketches (reference) | [`src/reference/arduino-car-code-3/`](src/reference/arduino-car-code-3/) |
 | Code-side TODO | [`src/ToDo.md`](src/ToDo.md) |
+| Session 2 — Copilot extension challenges (student handout) | [`docs/handouts/session2-copilot-challenges.md`](docs/handouts/session2-copilot-challenges.md) |
+| mBot bring-up / hardware test plan | [`src/mbot/TEST_PLAN.md`](src/mbot/TEST_PLAN.md) |
 
 ## Privacy
 
